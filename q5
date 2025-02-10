@@ -1,0 +1,57 @@
+Note in answering: All numerical values, as well as the expected answers here, are in hexadecimal. Due to the strict string matching in the automated grading, you must use lowercase letters in your hexadecimal strings. You must also abide by the length requirement given next to the answer box you are to fill in.
+
+Consider the following code snippet of a relocatable object file from using "objdump -d":
+
+0000000000000000 <main>:
+   0:   55                      push   %rbp
+   1:   ...
+   4:   ...
+        ...
+
+0000000000000016 <func>:
+  16:   55                      push   %rbp
+  17:   48 89 e5                mov    %rsp,%rbp
+  1a:   8b 05 00 00 00 00       mov    0x0(%rip),0.000000e+00ax        # instruction of interest
+  20:   89 c6                   mov    6.952878e-310ax,0.000000e+00si
+
+Also, we have the following relocation record in the same file:
+
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+00000000001c  000a00000002 R_X86_64_PC32     0000000000000000 myvar + 24
+
+Now further suppose that the dynamic linker has decided to start main at virtual address 0x0020f521. It also decided that myvar should be at virtual address 0x00503340. 
+
+Compute the following information corresponding to the mov instruction labeled by the comment "# instruction of interest" above, starting with the virtual address (of that instruction ) and the byte in that memory location, in increasing order:
+
+Starting memory location 0x
+000000000020f53b
+ (length 16 hexadecimal string): byte content 0x8b
+Next byte: 0x05
+Next byte: 0x
+17
+ (length 2 hexadecimal string)
+Next byte: 0x
+d0
+ (length 2 hexadecimal string)
+Next byte: 0x
+
+
+
+
+
+	•	知识点
+	1.	ELF 重定位机制 (R_X86_64_PC32)。
+	2.	x86_64 指令集 (mov 0x0(%rip), %eax 和 RIP 相对寻址)。
+	3.	反汇编和动态链接解析方法。
+	•	计算逻辑
+	1.	计算指令的实际虚拟地址（基于 main 的起始地址）。
+	2.	解析重定位表，确定 myvar 的实际位置。
+	3.	计算RIP 相对偏移，存入 mov 指令中的占位符。
+	4.	按照小端序存储字节数据。
+
+这些知识不仅适用于这道题，也广泛用于理解 Linux 系统、GDB 调试、漏洞利用（如缓冲区溢出和 ROP）等场景。
+2f
+ (length 2 hexadecimal string)
+Next byte: 0x
+00
+ (length 2 hexadecimal string)
